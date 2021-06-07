@@ -85,10 +85,10 @@
  */
 
 // Show the Marlin bootscreen on startup. ** ENABLE FOR PRODUCTION **
-#define SHOW_BOOTSCREEN
+// #define SHOW_BOOTSCREEN
 
 // Show the bitmap in Marlin/_Bootscreen.h on startup.
-//#define SHOW_CUSTOM_BOOTSCREEN
+#define SHOW_CUSTOM_BOOTSCREEN
 
 // Show the bitmap in Marlin/_Statusscreen.h on the status screen.
 //#define CUSTOM_STATUS_SCREEN_IMAGE
@@ -127,7 +127,8 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_RAMPS_14_EFB
+  // #define MOTHERBOARD BOARD_RAMPS_14_EFB
+  #define MOTHERBOARD BOARD_MKS_GEN_L_V21
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
@@ -482,7 +483,9 @@
 
 // Comment the following line to disable PID and enable bang-bang.
 #define PIDTEMP
-#define BANG_MAX 255     // Limits current to nozzle while in bang-bang mode; 255=full current
+// #define BANG_MAX 255     // Limits current to nozzle while in bang-bang mode; 255=full current
+// modify by wzd
+#define BANG_MAX 64     // Limits current to nozzle while in bang-bang mode; 255=full current
 #define PID_MAX BANG_MAX // Limits current to nozzle while PID is active (see PID_FUNCTIONAL_RANGE below); 255=full current
 #define PID_K1 0.95      // Smoothing factor within any PID loop
 
@@ -499,9 +502,27 @@
     #define DEFAULT_Ki_LIST {   1.08,   1.08 }
     #define DEFAULT_Kd_LIST { 114.00, 114.00 }
   #else
-    #define DEFAULT_Kp  22.20
-    #define DEFAULT_Ki   1.08
-    #define DEFAULT_Kd 114.00
+    // 12v default
+    // #define DEFAULT_Kp  22.20
+    // #define DEFAULT_Ki   1.08
+    // #define DEFAULT_Kd 114.00
+    //24v power
+    // #define DEFAULT_Kp 5.84
+    // #define DEFAULT_Ki 0.45
+    // #define DEFAULT_Kd 18.89
+    //24v power    Gcode: M303 E0 S220 C8 U1
+    // #define DEFAULT_Kp 6.41
+    // #define DEFAULT_Ki 0.34
+    // #define DEFAULT_Kd 30.17
+    //24v power  fan:75%  Gcode: M303 E0 S210 C15 U1
+    // #define DEFAULT_Kp 5.95
+    // #define DEFAULT_Ki 0.41
+    // #define DEFAULT_Kd 21.31
+
+    //24v power  fan:75%  Gcode: M303 E0 S220 C15 U1
+    #define DEFAULT_Kp 6.10
+    #define DEFAULT_Ki 0.40
+    #define DEFAULT_Kd 23.22
   #endif
 #endif // PIDTEMP
 
@@ -540,9 +561,20 @@
 
   // 120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   // from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
-  #define DEFAULT_bedKp 10.00
-  #define DEFAULT_bedKi .023
-  #define DEFAULT_bedKd 305.4
+  // #define DEFAULT_bedKp 10.00
+  // #define DEFAULT_bedKi .023
+  // #define DEFAULT_bedKd 305.4
+  // modify by :wzd 12v 找的其他人的参数
+  // #define DEFAULT_bedKp 57.60
+  // #define DEFAULT_bedKi 2.16 
+  // #define DEFAULT_bedKd 383.37
+  // 24v M303 E-1 C8 S60  
+  // #define DEFAULT_bedKp 133.10
+  // #define DEFAULT_bedKi 26.21
+  // #define DEFAULT_bedKd 450.67
+  #define DEFAULT_bedKp 89.17
+  #define DEFAULT_bedKi 17.56
+  #define DEFAULT_bedKd 301.92
 
   // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
 #endif // PIDTEMPBED
@@ -678,6 +710,11 @@
  *          TMC5130, TMC5130_STANDALONE, TMC5160, TMC5160_STANDALONE
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'L6474', 'POWERSTEP01', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
  */
+#define X_DRIVER_TYPE  TMC2209
+#define Y_DRIVER_TYPE  TMC2209
+#define Z_DRIVER_TYPE  TMC2209
+#define E0_DRIVER_TYPE TMC2209
+
 //#define X_DRIVER_TYPE  A4988
 //#define Y_DRIVER_TYPE  A4988
 //#define Z_DRIVER_TYPE  A4988
@@ -1266,12 +1303,12 @@
   /**
    * Enable the G26 Mesh Validation Pattern tool.
    */
-  // #define G26_MESH_VALIDATION
+  #define G26_MESH_VALIDATION
   #if ENABLED(G26_MESH_VALIDATION)
     #define MESH_TEST_NOZZLE_SIZE    0.4  // (mm) Diameter of primary nozzle.
     #define MESH_TEST_LAYER_HEIGHT   0.2  // (mm) Default layer height for the G26 Mesh Validation Tool.
-    #define MESH_TEST_HOTEND_TEMP  205    // (°C) Default nozzle temperature for the G26 Mesh Validation Tool.
-    #define MESH_TEST_BED_TEMP      60    // (°C) Default bed temperature for the G26 Mesh Validation Tool.
+    #define MESH_TEST_HOTEND_TEMP  210    // (°C) Default nozzle temperature for the G26 Mesh Validation Tool.
+    #define MESH_TEST_BED_TEMP      40    // (°C) Default bed temperature for the G26 Mesh Validation Tool.
     #define G26_XY_FEEDRATE         20    // (mm/s) Feedrate for XY Moves for the G26 Mesh Validation Tool.
     #define G26_RETRACT_MULTIPLIER   1.0  // G26 Q (retraction) used by default between mesh test elements.
   #endif
